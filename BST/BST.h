@@ -31,6 +31,9 @@ public:
     K key() {return _key;}
     V val() {return _val;}
     
+    void setKey(K key) {_key = key;}
+    void setVal(V val) {_val = val; }
+    
     void setParent(TreeNode<K,V> *p) {_parent = p;}
     void setLeft(TreeNode<K,V> *l) {_left = l;}
     void setRight(TreeNode<K,V> *r) {_right = r;}
@@ -128,9 +131,9 @@ public:
         itr->visit();
     }
 
-    TreeNode<K,V>* min()
+    TreeNode<K,V>* min(TreeNode<K,V> *itr = NULL)
     {
-        TreeNode<K,V> *itr = _root;
+        if(!itr) itr = _root;
         while(itr->left())
         {
             itr = itr->left();
@@ -148,8 +151,134 @@ public:
         return itr;
     }
     
-    TreeNode<K,V>* successor();
-    void remove(K key);
+    TreeNode<K,V>*search(TreeNode<K,V> *itr,K key)
+    {
+        if(!itr)
+            return NULL;
+        
+        if(key < itr->key())
+        {
+            return search(itr->left(),key);
+        }
+        else if(key > itr->key())
+        {
+            return search(itr->right(),key);
+        }
+        return itr;
+    }
+    
+    TreeNode<K,V>* successor(TreeNode<K,V> *node)
+    {
+        if(!node)
+            return NULL;
+        
+        if(node->right())
+        {
+            return min(node->right());
+        }
+        
+        TreeNode<K,V> *parent = node->parent();
+        while(parent && parent->right() == node)
+        {
+            node = parent;
+            parent = node->parent();
+        }
+        return parent;
+    }
+    
+    void remove(TreeNode<K,V> *node)
+    {
+        //case 1: No child
+        //case 2: only one child
+        //case 3: two child
+        if(!node->left() && !node->right())
+        {
+            TreeNode<K,V> *parent = node->parent();
+            if(!parent)
+            {
+                delete _root;
+                _root = NULL;
+                return;
+            }
+            
+            if(parent->left() == node)
+            {
+                parent->setLeft(NULL);
+            }
+            else if(parent->right() == node)
+            {
+                parent->setRight(NULL);
+            }
+            else
+            {
+                std::cout<<"error case";
+                return;
+            }
+        }
+        else if(!node->left())
+        {
+            TreeNode<K,V> *parent = node->parent();
+            if(!parent)
+            {
+                _root = node->right();
+                _root->setParent(NULL);
+            }
+            else if(parent->left() == node)
+            {
+                parent->setLeft(node->right());
+                node->right()->setParent(parent);
+            }
+            else if(parent->right() == node)
+            {
+                parent->setRight(node->right());
+                node->right()->setParent(parent);
+            }
+            else
+            {
+                std::cout<<"error case";
+                return;
+            }
+            node->setLeft(NULL);
+            node->setRight(NULL);
+            delete node;
+        }
+        else if(!node->right())
+        {
+            TreeNode<K,V> *parent = node->parent();
+            if(!parent)
+            {
+                _root = node->left();
+                _root->setParent(NULL);
+            }
+            else if(parent->left() == node)
+            {
+                parent->setLeft(node->left());
+                node->left()->setParent(parent);
+            }
+            else if(parent->right() == node)
+            {
+                parent->setRight(node->left());
+                node->left()->setParent(parent);
+            }
+            else
+            {
+                std::cout<<"error case";
+                return;
+            }
+            node->setLeft(NULL);
+            node->setRight(NULL);
+            delete node;
+        }
+        else
+        {
+            TreeNode<K,V> *next = successor(node);
+            node->setKey(next->key());
+            node->setVal(next->val());
+            
+            remove(next);
+            
+        }
+    }
     
 private:
     TreeNode<K,V> *_root;
