@@ -185,6 +185,33 @@ public:
         }
         return parent;
     }
+    void swapWithDelete(TreeNode<K,V> *node,TreeNode<K,V> *child)
+    {
+        TreeNode<K,V> *parent = node->parent();
+        if(!parent)
+        {
+            _root = child;
+            _root->setParent(NULL);
+        }
+        else if(parent->left() == node)
+        {
+            parent->setLeft(child);
+            child->setParent(parent);
+        }
+        else if(parent->right() == node)
+        {
+            parent->setRight(child);
+            child->setParent(parent);
+        }
+        else
+        {
+            std::cout<<"error case";
+            return;
+        }
+        node->setLeft(NULL);
+        node->setRight(NULL);
+        delete node;
+    }
     
     void remove(TreeNode<K,V> *node)
     {
@@ -217,64 +244,17 @@ public:
         }
         else if(!node->left())
         {
-            TreeNode<K,V> *parent = node->parent();
-            if(!parent)
-            {
-                _root = node->right();
-                _root->setParent(NULL);
-            }
-            else if(parent->left() == node)
-            {
-                parent->setLeft(node->right());
-                node->right()->setParent(parent);
-            }
-            else if(parent->right() == node)
-            {
-                parent->setRight(node->right());
-                node->right()->setParent(parent);
-            }
-            else
-            {
-                std::cout<<"error case";
-                return;
-            }
-            node->setLeft(NULL);
-            node->setRight(NULL);
-            delete node;
+            swapWithDelete(node,node->right());
         }
         else if(!node->right())
         {
-            TreeNode<K,V> *parent = node->parent();
-            if(!parent)
-            {
-                _root = node->left();
-                _root->setParent(NULL);
-            }
-            else if(parent->left() == node)
-            {
-                parent->setLeft(node->left());
-                node->left()->setParent(parent);
-            }
-            else if(parent->right() == node)
-            {
-                parent->setRight(node->left());
-                node->left()->setParent(parent);
-            }
-            else
-            {
-                std::cout<<"error case";
-                return;
-            }
-            node->setLeft(NULL);
-            node->setRight(NULL);
-            delete node;
+            swapWithDelete(node,node->left());
         }
         else
         {
             TreeNode<K,V> *next = successor(node);
             node->setKey(next->key());
             node->setVal(next->val());
-            
             remove(next);
             
         }
