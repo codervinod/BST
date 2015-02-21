@@ -9,6 +9,23 @@
 #include <iostream>
 #include "BST.h"
 
+
+TreeNode<int,int>  *createMinimalBST(int ar[],unsigned int low,unsigned int high)
+{
+    if(low < high)
+    {
+        int mid = (low+high)/2;
+        
+        TreeNode<int,int> *node = new TreeNode<int,int>(ar[mid],0);
+        
+        node->setLeft(createMinimalBST(ar,low,mid));
+        node->setRight(createMinimalBST(ar,mid+1,high));
+        
+        return node;
+    }
+    return NULL;
+}
+
 using namespace std;
 int main(int argc, const char * argv[]) {
     
@@ -52,7 +69,6 @@ int main(int argc, const char * argv[]) {
         
     }
     
-    /*
     node = tree->root();
     while(node)
     {
@@ -61,9 +77,14 @@ int main(int argc, const char * argv[]) {
         tree->inOrder(tree->root());
         node = tree->root();
     }
-    */
-    cout<<"Print Levels"<<endl;
-    tree->printLevel();
+
+    int ar[]={0,1,2,3,4,5,6,7,8,9};
+    int sizeofar = sizeof ar / sizeof(int);
+    
+    Tree<int,int> *tree2 = new Tree<int,int>(createMinimalBST(ar,0,sizeofar));
+    
+    cout<<"Print Levels 2"<<endl;
+    tree2->printLevel();
     
     return 0;
 }

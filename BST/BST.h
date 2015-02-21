@@ -59,6 +59,9 @@ class Tree
 {
 public:
     Tree():_root(NULL){}
+    
+    Tree(TreeNode<K,V> *root):_root(root) {}
+    
     virtual ~Tree()
     {
         if(_root)
