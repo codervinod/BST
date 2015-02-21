@@ -10,7 +10,7 @@
 #define BST_BST_h
 
 #include <iostream>
-
+#include <queue>
 template <class K,class V>
 class TreeNode
 {
@@ -256,7 +256,33 @@ public:
             node->setKey(next->key());
             node->setVal(next->val());
             remove(next);
+        }
+    }
+    
+    void printLevel()
+    {
+        typedef std::pair<int,TreeNode<K,V> *> LevelNodePair;
+        std::queue<LevelNodePair> q;
+        
+        q.push(LevelNodePair(0,_root));
+        
+        while(!q.empty())
+        {
+            LevelNodePair &node = q.front();
+            std::cout<<node.first<<"\t";
+            node.second->visit();
             
+            if(node.second->left())
+            {
+                q.push(LevelNodePair(node.first+1,node.second->left()));
+            }
+            
+            if(node.second->right())
+            {
+                q.push(LevelNodePair(node.first+1,node.second->right()));
+            }
+            
+            q.pop();
         }
     }
     

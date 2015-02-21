@@ -52,6 +52,7 @@ int main(int argc, const char * argv[]) {
         
     }
     
+    /*
     node = tree->root();
     while(node)
     {
@@ -60,6 +61,9 @@ int main(int argc, const char * argv[]) {
         tree->inOrder(tree->root());
         node = tree->root();
     }
+    */
+    cout<<"Print Levels"<<endl;
+    tree->printLevel();
     
     return 0;
 }
