@@ -9,6 +9,7 @@
 #include <iostream>
 #include "BST.h"
 
+using namespace std;
 
 TreeNode<int,int>  *createMinimalBST(int ar[],unsigned int low,unsigned int high)
 {
@@ -26,9 +27,22 @@ TreeNode<int,int>  *createMinimalBST(int ar[],unsigned int low,unsigned int high
     return NULL;
 }
 
-using namespace std;
-int main(int argc, const char * argv[]) {
+void testMinimalBSTCreation()
+{
+    int ar[]={0,1,2,3,4,5,6,7,8,9};
+    int sizeofar = sizeof ar / sizeof(int);
     
+    Tree<int,int> *tree2 = new Tree<int,int>(createMinimalBST(ar,0,sizeofar));
+    
+    cout<<"Print Levels 2"<<endl;
+    tree2->printLevel();
+    cout<<"Inorder 2"<<endl;
+    
+    tree2->inOrder(tree2->root());
+}
+
+void testTreeTraversals()
+{
     Tree<int,int> *tree = new Tree<int,int>();
     
     tree->insert(5,0);
@@ -47,6 +61,21 @@ int main(int argc, const char * argv[]) {
     
     cout<<"PreOrder Traversal";
     tree->preOrder(tree->root());
+    
+}
+
+void testTreeSuccessorAndDeletion()
+{
+    Tree<int,int> *tree = new Tree<int,int>();
+    
+    tree->insert(5,0);
+    tree->insert(29,0);
+    tree->insert(6,0);
+    tree->insert(7,0);
+    tree->insert(32,0);
+    tree->insert(2,0);
+    tree->insert(19,0);
+    tree->insert(11,0);
     
     cout<<"Min element:";
     tree->min()->visit();
@@ -78,13 +107,34 @@ int main(int argc, const char * argv[]) {
         node = tree->root();
     }
 
-    int ar[]={0,1,2,3,4,5,6,7,8,9};
-    int sizeofar = sizeof ar / sizeof(int);
+}
+
+void testLevelPrint()
+{
+    Tree<int,int> *tree = new Tree<int,int>();
     
-    Tree<int,int> *tree2 = new Tree<int,int>(createMinimalBST(ar,0,sizeofar));
+    tree->insert(5,0);
+    tree->insert(29,0);
+    tree->insert(6,0);
+    tree->insert(7,0);
+    tree->insert(32,0);
+    tree->insert(2,0);
+    tree->insert(19,0);
+    tree->insert(11,0);
     
-    cout<<"Print Levels 2"<<endl;
-    tree2->printLevel();
+    cout<<"Print Levels"<<endl;
+    tree->printLevel();
+}
+
+int main(int argc, const char * argv[]) {
+    
+    testTreeTraversals();
+    
+    testTreeSuccessorAndDeletion();
+    
+    testLevelPrint();
+    
+    testMinimalBSTCreation();
     
     return 0;
 }
