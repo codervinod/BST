@@ -120,8 +120,8 @@ public:
             return;
         
         itr->visit();
-        inOrder(itr->left());
-        inOrder(itr->right());
+        preOrder(itr->left());
+        preOrder(itr->right());
     }
 
     void postOrder(TreeNode<K,V> *itr)
@@ -129,9 +129,37 @@ public:
         if(!itr)
             return;
         
-        inOrder(itr->left());
-        inOrder(itr->right());
+        postOrder(itr->left());
+        postOrder(itr->right());
         itr->visit();
+    }
+    
+    void inOrderArray(TreeNode<K,V> *itr,std::vector<std::pair<K,V>> &ar)
+    {
+        if(!itr)
+            return;
+        inOrderArray(itr->left(),ar);
+        ar.push_back(std::pair<K,V>(itr->key(),itr->val()));
+        inOrderArray(itr->right(),ar);
+    }
+    void preOrderArray(TreeNode<K,V> *itr,std::vector<std::pair<K,V>> &ar)
+    {
+        if(!itr)
+            return;
+        
+        ar.push_back(std::pair<K,V>(itr->key(),itr->val()));
+        preOrderArray(itr->left(),ar);
+        preOrderArray(itr->right(),ar);
+    }
+    
+    void postOrderArray(TreeNode<K,V> *itr,std::vector<std::pair<K,V>> &ar)
+    {
+        if(!itr)
+            return;
+        
+        postOrderArray(itr->left(),ar);
+        postOrderArray(itr->right(),ar);
+        ar.push_back(std::pair<K,V>(itr->key(),itr->val()));
     }
 
     TreeNode<K,V>* min(TreeNode<K,V> *itr = NULL)
